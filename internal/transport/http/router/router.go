@@ -10,6 +10,7 @@ func NewRouterCompl() *mux.Router {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/create-user", handler.CreateUser).Methods("POST")
+	router.HandleFunc("/user/me", handler.GetUser).Methods("GET")
 
 	return router
 }
