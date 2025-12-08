@@ -5,3 +5,8 @@ type CreateUserDTO struct {
 	Email    string `json:"email"`
 	Password string `Json:"password"`
 }
+
+type LoginRespons struct {
+	Email    string `Json:"email"`
+	Password string `json:"password"`
+}

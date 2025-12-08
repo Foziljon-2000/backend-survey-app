@@ -9,6 +9,7 @@ var (
 	ErrInvalidEmail            = errors.New("неверный формат электронной почты")
 	ErrSuccess                 = errors.New("Успешно")
 	ErrThisEmailIsAlreadyTaken = errors.New("Этот email уже занят")
+	ErrUnauthorized            = errors.New("Неправильный логин или пароль")
 )
 
 var StatusCodes map[string]int = map[string]int{
@@ -19,6 +20,7 @@ var StatusCodes map[string]int = map[string]int{
 	ErrBadRequest.Error():              400,
 	ErrInvalidEmail.Error():            400,
 	ErrThisEmailIsAlreadyTaken.Error(): 409,
+	ErrUnauthorized.Error():            401,
 
 	//500 ...
 	ErrInternalServer.Error(): 500,

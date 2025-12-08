@@ -18,6 +18,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&newUser)
 	if err != nil {
 		resp.Message = responses.ErrBadRequest.Error()
+		return
 	}
 
 	err = service.CreateUser(newUser.Login, newUser.Email, newUser.Password)

@@ -19,6 +19,7 @@ func CreateUser(login, email, password string) (err error) {
 
 	user, err := storage.GetUserByEmail(email)
 	if err != nil && err != responses.ErrUserDoesNotExist {
+		
 		return
 	}
 
