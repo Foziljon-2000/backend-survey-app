@@ -2,15 +2,22 @@ package router
 
 import (
 	"backend-survey-app/internal/transport/http/handler"
+	"backend-survey-app/internal/transport/http/mw"
 
 	"github.com/gorilla/mux"
 )
 
 func NewRouterCompl() *mux.Router {
-	router := mux.NewRouter()
+	r := mux.NewRouter()
 
-	router.HandleFunc("/create-user", handler.CreateUser).Methods("POST")
-	router.HandleFunc("/user/me", handler.GetUser).Methods("GET")
+	r.HandleFunc("/create-user", handler.CreateUser).Methods("POST")
+	r.HandleFunc("/login", handler.Login).Methods("POST")
+	r.HandleFunc("/logout", handler.Logout).Methods("POST")
 
-	return router
+	// защищённые роуты
+	secured := r.PathPrefix("/user").Subrouter()
+	secured.Use(mw.Auth)
+	secured.HandleFunc("/me", handler.GetUser).Methods("GET")
+
+	return r
 }

@@ -8,8 +8,7 @@ import (
 	"time"
 )
 
-func Login(email string, password string) (err error) {
-	// valid
+func Login(email string, password string) (access string, refresh string, err error) {
 	user, err := storage.GetUserByEmail(email)
 	if err != nil {
 		err = responses.ErrUnauthorized
@@ -27,13 +26,20 @@ func Login(email string, password string) (err error) {
 		return
 	}
 
-	now := time.Now()
-	refreshToken, err := aush.GenerateAccessToken(int(user.UserID))
+	access, err = aush.GenerateAccessToken(int(user.UserID))
 	if err != nil {
 		return
 	}
 
-	err = storage.CreateAccessTokin(int(user.UserID), refreshToken, now)
+	refresh, err = aush.GenerateRefreshToken(int(user.UserID))
+	if err != nil {
+		return
+	}
+
+	// refresh действует 30 суток
+	expires := time.Now().Add(720 * time.Hour)
+
+	err = storage.CreateRefreshToken(int(user.UserID), refresh, expires)
 	if err != nil {
 		return
 	}
