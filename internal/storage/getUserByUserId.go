@@ -7,7 +7,7 @@ import (
 )
 
 func GetUserByUserId(userId int) (user entities.User, err error) {
-	row := database.QueryRow("select * from users where user_id = $1", userId)
+	row := database.QueryRow("select user_id, login, email, password, created_at, updated_at from users where user_id = $1", userId)
 
 	err = row.Scan(&user.UserID, &user.Login, &user.Email, &user.Password, &user.CreatedAt, &user.UpdatedAt)
 

@@ -7,10 +7,9 @@ import (
 )
 
 func GetUserByEmail(email string) (user entities.User, err error) {
-	row := database.QueryRow("select * from users where email = $1", email)
+	row := database.QueryRow("select user_id, login, email, password, created_at, updated_at from users where email = $1", email)
 
 	err = row.Scan(&user.UserID, &user.Login, &user.Email, &user.Password, &user.CreatedAt, &user.UpdatedAt)
-
 	if err == sql.ErrNoRows {
 		err = responses.ErrUserDoesNotExist
 		return

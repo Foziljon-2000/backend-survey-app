@@ -5,15 +5,23 @@ import (
 	responses "backend-survey-app/pkg/errors"
 	httpResponser "backend-survey-app/pkg/http"
 	"net/http"
-	"strconv"
 )
 
 func Logout(w http.ResponseWriter, r *http.Request) {
 	var resp httpResponser.Response
 	defer resp.Concerter(w)
 
-	userIdStr := r.Header.Get("X-User-ID")
-	userId, _ := strconv.Atoi(userIdStr)
+	uid := r.Context().Value("user_id")
+	if uid == nil {
+		resp.Message = responses.ErrUnauthorized.Error()
+		return
+	}
+
+	userId, ok := uid.(int)
+	if !ok {
+		resp.Message = responses.ErrUnauthorized.Error()
+		return
+	}
 
 	err := service.Logout(userId)
 	if err != nil {

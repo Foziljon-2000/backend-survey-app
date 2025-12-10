@@ -12,7 +12,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	var resp httpResponser.Response
 	defer resp.Concerter(w)
 
-	var dto LoginRespons
+	var dto LoginRequest
 
 	err := json.NewDecoder(r.Body).Decode(&dto)
 	if err != nil {

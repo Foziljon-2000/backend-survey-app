@@ -20,13 +20,13 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		resp.Message = responses.ErrBadRequest.Error()
 		return
 	}
+	defer r.Body.Close()
 
 	err = service.CreateUser(newUser.Login, newUser.Email, newUser.Password)
 	if err != nil {
 		resp.Message = err.Error()
 		return
 	}
-	defer r.Body.Close()
 
 	resp.Message = responses.ErrSuccess.Error()
 }
@@ -44,6 +44,7 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 
 	user, err := service.GetUser(userId)
 	if err != nil {
+		resp.Message = err.Error()
 		return
 	}
 
