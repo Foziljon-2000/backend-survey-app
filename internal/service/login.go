@@ -11,19 +11,12 @@ import (
 func Login(email string, password string) (access string, refresh string, err error) {
 	user, err := storage.GetUserByEmail(email)
 	if err != nil {
-		err = responses.ErrUnauthorized
-		return
+		return "", "", responses.ErrUnauthorized
 	}
 
-	passwordHash, err := utils.CreateHashPassword(password)
+	err = utils.ComparePassword(user.Password, password)
 	if err != nil {
-		err = responses.ErrInternalServer
-		return
-	}
-
-	if user.Password != passwordHash {
-		err = responses.ErrUnauthorized
-		return
+		return "", "", responses.ErrUnauthorized
 	}
 
 	access, err = aush.GenerateAccessToken(int(user.UserID))
@@ -36,7 +29,6 @@ func Login(email string, password string) (access string, refresh string, err er
 		return
 	}
 
-	// refresh действует 30 суток
 	expires := time.Now().Add(720 * time.Hour)
 
 	err = storage.CreateRefreshToken(int(user.UserID), refresh, expires)

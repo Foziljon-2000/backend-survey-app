@@ -20,7 +20,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer r.Body.Close()
-	
+
 	access, refresh, err := service.Login(dto.Email, dto.Password)
 	if err != nil {
 		resp.Message = err.Error()
