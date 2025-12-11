@@ -18,5 +18,13 @@ func NewRouterCompl() *mux.Router {
 	secured.HandleFunc("/me", handler.GetUser).Methods("GET")
 	secured.HandleFunc("/logout", handler.Logout).Methods("POST")
 
+	quiz := r.PathPrefix("/quiz").Subrouter()
+	quiz.Use(mw.Auth)
+
+	quiz.HandleFunc("/create", handler.CreateQuiz).Methods("POST")
+	quiz.HandleFunc("/get", handler.GetQuiz).Methods("GET")
+	quiz.HandleFunc("/update", handler.UpdateQuiz).Methods("PUT")
+	quiz.HandleFunc("/delete", handler.DeleteQuiz).Methods("DELETE")
+
 	return r
 }
